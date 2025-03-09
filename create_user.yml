@@ -1,0 +1,14 @@
+- name: Tworzenie użytkownika
+  hosts: local
+  become: yes
+  tasks:
+    - name: Tworzenie użytkownika 'devops'
+      user:
+        name: devops
+        password: "{{ 'Marcin' | password_hash('sha512') }}"
+        shell: /bin/bash
+        home: /home/devops
+        createhome: yes
+        groups: wheel
+        state: present
+

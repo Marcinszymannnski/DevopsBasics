@@ -1,0 +1,33 @@
+- name: Uruchomienie kontenera Nginx
+  hosts: localhost
+  become: yes
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+    - name: Instalacja Dockera
+      zypper:
+        name: docker
+        state: present
+
+    - name: Uruchomienie usługi Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pobranie obrazu Nginx
+      community.docker.docker_image:
+        name: nginx
+        source: pull
+
+    - name: Uruchomienie kontenera Nginx
+      community.docker.docker_container:
+        name: nginx_server
+        image: nginx
+        state: started
+        restart_policy: always
+        ports:
+          - 8080:80
+
